@@ -16,8 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken.views import obtain_auth_token  
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
+from MyWebApps.MNGTournament.views import (
+    OrganizerViewSet, TeamViewSet, PlayerViewSet,
+    TournamentViewSet, PlayerTournamentViewSet
+)
+
+router = DefaultRouter()
+router.register(r'organizers', OrganizerViewSet, basename='organizer')
+router.register(r'teams', TeamViewSet, basename='team')
+router.register(r'players', PlayerViewSet, basename='player')
+router.register(r'tournaments', TournamentViewSet, basename='tournament')
+router.register(r'player-tournaments', PlayerTournamentViewSet, basename='playertournament')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('MyWebApps.MNGTournament.urls')),
+    path('api/', include(router.urls)), 
+    path('api/login/', obtain_auth_token, name='api_token_auth'),  
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]

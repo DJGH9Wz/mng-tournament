@@ -18,7 +18,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 
-# === Entornos Virtuales (NUNCA se suben a GitHub) ===
+# === Entornos Virtuales 
 my_env/
 .env/
 env/
@@ -26,10 +26,9 @@ ENV/
 venv/
 .venv/
 
-# === Base de Datos Local (Para que no pises los datos de tus compañeros) ===
+# === Base de Datos Local 
 *.sqlite3
 
-# === Editores de Código e IDEs ===
 .vscode/
 .idea/
 *.suo

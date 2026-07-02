@@ -1,0 +1,103 @@
+[
+  {
+    "model": "MNGTournament.organizer",
+    "pk": 1,
+    "fields": {
+      "organizationName": "Liga Universitaria UNSA",
+      "email": "contacto@ligaunsa.edu.pe",
+      "website": "https://ligaunsa.vercel.app",
+      "status": true,
+      "created": "2026-06-25T20:00:00Z",
+      "modified": "2026-06-25T20:00:00Z"
+    }
+  },
+  {
+    "model": "MNGTournament.team",
+    "pk": 1,
+    "fields": {
+      "teamName": "Sistemas FIPS",
+      "logoUrl": "https://api.dicebear.com/7.x/identicon/svg?seed=Sistemas",
+      "status": true,
+      "created": "2026-06-25T20:00:00Z",
+      "modified": "2026-06-25T20:00:00Z"
+    }
+  },
+  {
+    "model": "MNGTournament.team",
+    "pk": 2,
+    "fields": {
+      "teamName": "CyberKnights",
+      "logoUrl": "https://api.dicebear.com/7.x/identicon/svg?seed=Cyber",
+      "status": true,
+      "created": "2026-06-25T20:00:00Z",
+      "modified": "2026-06-25T20:00:00Z"
+    }
+  },
+  {
+    "model": "MNGTournament.player",
+    "pk": 1,
+    "fields": {
+      "gamertag": "DjinsValdivia",
+      "email": "manuel.djins@unsa.edu.pe",
+      "rank": "Inmortal",
+      "team": 1,
+      "status": true,
+      "created": "2026-06-25T20:00:00Z",
+      "modified": "2026-06-25T20:00:00Z"
+    }
+  },
+  {
+    "model": "MNGTournament.player",
+    "pk": 2,
+    "fields": {
+      "gamertag": "ChronoRex",
+      "email": "chronorex@gmail.com",
+      "rank": "Diamante",
+      "team": 2,
+      "status": true,
+      "created": "2026-06-25T20:00:00Z",
+      "modified": "2026-06-25T20:00:00Z"
+    }
+  },
+  {
+    "model": "MNGTournament.tournament",
+    "pk": 1,
+    "fields": {
+      "organizer": 1,
+      "gameName": "Dota 2",
+      "tournamentTitle": "Copa Inter-Escuelas 2026",
+      "virtualPrize": "Medalla de Oro + 5000 Trofeos",
+      "maxParticipants": 16,
+      "eventDate": "2026-07-15",
+      "status": true,
+      "created": "2026-06-25T20:00:00Z",
+      "modified": "2026-06-25T20:00:00Z"
+    }
+  },
+  {
+    "model": "MNGTournament.playertournament",
+    "pk": 1,
+    "fields": {
+      "player": 1,
+      "tournament": 1,
+      "score": 120,
+      "finalPosition": 1,
+      "status": true,
+      "created": "2026-06-25T20:00:00Z",
+      "modified": "2026-06-25T20:00:00Z"
+    }
+  },
+  {
+    "model": "MNGTournament.playertournament",
+    "pk": 2,
+    "fields": {
+      "player": 2,
+      "tournament": 1,
+      "score": 95,
+      "finalPosition": 2,
+      "status": true,
+      "created": "2026-06-25T20:00:00Z",
+      "modified": "2026-06-25T20:00:00Z"
+    }
+  }
+]

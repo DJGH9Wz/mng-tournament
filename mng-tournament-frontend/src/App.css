@@ -1,0 +1,413 @@
+/* --- CONFIGURACIÓN GENERAL --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- NAVBAR MODERNA --- */
+.navbar {
+  background-color: #111827; 
+  color: white;
+  padding: 18px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-bottom: 3px solid #f97316; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-brand {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: #d1d5db;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+  background-color: rgba(249, 115, 22, 0.15); 
+  text-decoration: none;
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+.main-content {
+  padding: 32px 24px;
+  flex: 1;
+}
+
+/* --- PÁGINA DE INICIO (HOME / DASHBOARD) --- */
+.home-page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.dashboard-header {
+  background: #111827; /* Cambiado a gris premium para hacer match con la Navbar */
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 6px solid #f97316;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.header-title-block h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-header .subtitle {
+  margin: 4px 0 0 0;
+  color: #9ca3af;
+  font-size: 0.95rem;
+}
+
+.header-user-block {
+  text-align: right;
+}
+
+.header-user-block .welcome-text {
+  display: block;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.logout-link-btn {
+  background: transparent;
+  color: #f87171;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.logout-link-btn:hover {
+  color: #fca5a5;
+}
+
+.section-title {
+  color: #111827;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* --- CUADRÍCULA DE TARJETAS (HOME) --- */
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.home-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e5e7eb;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.home-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.1), 0 4px 6px -2px rgba(249, 115, 22, 0.05);
+  border-color: rgba(249, 115, 22, 0.3);
+}
+
+.home-card:hover::before {
+  background-color: #f97316; 
+}
+
+.home-card h2 {
+  color: #111827;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.home-card p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.metric-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #f97316;
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* --- VISTAS DE PÁGINAS ADMINISTRATIVAS --- */
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-container h1 {
+  color: #111827;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* --- FORMULARIOS Y SELECTS COMPARTIDOS --- */
+.form-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.form-card h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 16px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+/* 🔄 Inputs y Selectores (Dropdowns de Equipos/Organizadores) unificados */
+.form-grid input,
+.form-grid select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #212529;
+  background-color: #ffffff;
+  outline: none;
+  font-family: inherit;
+  height: 42px; /* Altura idéntica garantizada */
+}
+
+.form-grid input:focus,
+.form-grid select:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
+/* Estilo sutil para las opciones dentro del selector */
+.form-grid select option {
+  color: #212529;
+  background-color: #ffffff;
+  padding: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #4b5563;
+  cursor: pointer;
+  height: 42px; /* Alineación vertical con los inputs */
+}
+
+.checkbox-label input[type="checkbox"] {
+  accent-color: #f97316; 
+  width: 16px;
+  height: 16px;
+}
+
+/* --- BOTONES --- */
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  background-color: #f97316; 
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+  height: 42px;
+}
+
+.form-actions button:hover {
+  background-color: #ea580c; 
+  box-shadow: 0 4px 6px rgba(249, 115, 22, 0.3);
+}
+
+.form-actions .secondary {
+  background-color: #6b7280;
+  box-shadow: none;
+}
+
+.form-actions .secondary:hover {
+  background-color: #4b5563;
+  box-shadow: none;
+}
+
+/* --- TABLAS ADMINISTRATIVAS --- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+  border: 1px solid #e5e7eb;
+}
+
+.data-table th {
+  background-color: #111827; 
+  color: #f97316; 
+  padding: 14px 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+}
+
+.data-table tr:hover {
+  background-color: #fff7ed; 
+}
+
+.data-table button {
+  padding: 6px 12px;
+  margin-right: 6px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+.data-table button:hover {
+  background-color: #f97316;
+  color: white;
+  border-color: #f97316;
+}
+
+.data-table button.danger {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+.data-table button.danger:hover {
+  background-color: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+/* --- VISTA INDEPENDIENTE DE LOGIN (PANTALLA COMPLETA) --- */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #111827; /* Fondo oscuro premium acorde al ambiente gaming */
+}
+
+.login-form {
+  padding: 2.5rem;
+  background: #1f2937; /* Gris un poco más claro para contraste */
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  width: 360px;
+  border-top: 4px solid #f97316;
+}
+
+/* --- ESTADOS DE CARGA Y MENSAJES --- */
+.status-message {
+  text-align: center;
+  padding: 48px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.status-message.error {
+  color: #dc2626;
+  font-weight: 600;
+}
