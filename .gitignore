@@ -1,0 +1,44 @@
+# === Python (Archivos compilados y caché) ===
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# === Entornos Virtuales 
+my_env/
+.env/
+env/
+ENV/
+venv/
+.venv/
+
+# === Base de Datos Local 
+*.sqlite3
+
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# === Sistema Operativo ===
+Thumbs.db
+db.json
+Desktop.ini
+.DS_Store
