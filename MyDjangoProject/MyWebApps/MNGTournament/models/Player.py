@@ -1,7 +1,17 @@
 from django.db import models
+from django.contrib.auth.models import User
 from .Team import Team
 
 class Player(models.Model):
+    
+    user = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True, 
+        related_name='player_profile'
+    )
+    
     gamertag = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=100, unique=True)
     rank = models.CharField(max_length=50, null=True, blank=True)
@@ -35,5 +45,5 @@ class Player(models.Model):
             self.gamertag = self.gamertag.strip()
         if self.email:
             self.email = self.email.strip().lower()  
-        self.full_clean()                            
+        self.full_clean()                                            
         super(Player, self).save(*args, **kwargs)
