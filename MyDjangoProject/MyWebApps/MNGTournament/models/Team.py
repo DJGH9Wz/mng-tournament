@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Team(models.Model):
     teamName = models.CharField(max_length=100, unique=True)
-    logoUrl = models.URLField(max_length=255, null=True, blank=True)
+    logoUrl = models.TextField(null=True, blank=True)
     
     # El capitán del equipo (apunta a User)
     captain = models.ForeignKey(

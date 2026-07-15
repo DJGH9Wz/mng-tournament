@@ -63,6 +63,15 @@ class RegisterView(APIView):
                     email=email
                 )
 
+                Player.objects.get_or_create(
+                    user=user,
+                    defaults={
+                        'gamertag': user.username,
+                        'email': user.email,
+                        'role': 'player'
+                    }
+                )
+
             return Response(
                 {'message': 'Usuario registrado y perfil de jugador creado exitosamente.'}, 
                 status=status.HTTP_201_CREATED

@@ -4,7 +4,9 @@ from .Player import Player
 from .Tournament import Tournament
 from .PlayerTournament import PlayerTournament
 from .Match import Match
-from .TeamTournament import TeamTournament  
+from .TeamTournament import TeamTournament
+from .TeamMember import TeamMember
+from .Invitation import Invitation
 
 
 __all__ = [
@@ -14,5 +16,7 @@ __all__ = [
     "Tournament",
     "PlayerTournament",
     "Match",
-    "TeamTournament"  
+    "TeamTournament",
+    "TeamMember",
+    "Invitation",
 ]

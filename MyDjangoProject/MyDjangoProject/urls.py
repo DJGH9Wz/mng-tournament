@@ -19,8 +19,9 @@ URL configuration for MyDjangoProject project.
 """
 from django.contrib import admin
 from django.urls import path, include
+from MyWebApps.MNGTournament.auth_views import CustomAuthToken
 from rest_framework.routers import DefaultRouter
-from rest_framework.authtoken.views import ObtainAuthToken  # Importación corregida
+from rest_framework.authtoken.views import ObtainAuthToken, obtain_auth_token 
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -57,9 +58,11 @@ router.register(r'team-tournaments', TeamTournamentViewSet, basename='team-tourn
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
     path('api/', include('MyWebApps.MNGTournament.urls')),
     path('api-token-auth/', CustomAuthToken.as_view(), name='api_token_auth'),
     path('api/current-user/', tournament_views.current_user),
+    path('api/api-token-auth/', obtain_auth_token, name='api_token_auth'),
     
     # Documentación de la API
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

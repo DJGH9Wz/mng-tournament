@@ -6,6 +6,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
     throw new Error(`Error en la petición: ${response.status} ${response.statusText}`);
   }
   if (response.status === 204) {
+    
     return undefined as unknown as T;
   }
   return response.json() as Promise<T>;
