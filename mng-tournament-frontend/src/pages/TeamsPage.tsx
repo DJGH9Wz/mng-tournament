@@ -1,4 +1,5 @@
-import { useState, ChangeEvent } from 'react'
+import { useState } from 'react'
+import type { ChangeEvent } from 'react'
 import type { Team } from '../types/tournament'
 import {
   useCreateResource,
@@ -22,8 +23,8 @@ const emptyForm = {
 
 export function TeamsPage() {
   const { profile } = useAuth()
-  const { data, isLoading, isError } = useResourceList<any>(RESOURCE)
-  const { data: users } = useResourceList<any>(USERS_RESOURCE)
+  const { data, isLoading, isError } = useResourceList(RESOURCE)
+const { data: users } = useResourceList(USERS_RESOURCE)
 
   console.log("Jugadores recibidos de Django:", users)
 
