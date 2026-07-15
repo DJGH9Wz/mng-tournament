@@ -55,3 +55,19 @@ export interface PlayerTournament {
   created?: string
   modified?: string
 }
+
+export interface TeamTournament {
+  id: number;
+  team: number;        
+  tournament: number; 
+  score: number;
+  finalPosition: number | null;
+  status: boolean;
+  created: string;
+  modified: string;
+}
+
+export interface RegisterTeamPayload {
+  team: number;
+  tournament: number;
+}

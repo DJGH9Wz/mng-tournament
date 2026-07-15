@@ -1,15 +1,36 @@
+/* --- App.css para todas las paginas--- */
+:root {
+  --bg-primary: #0d0d0e;       /* Negro carbón para el fondo general */
+  --bg-secondary: #151518;     /* Gris muy oscuro para Cabecera y Sidebar */
+  --bg-card: #1e1e22;          /* Tarjetas y cajas de estadísticas */
+  --color-red: #e61c24;        /* Rojo intenso principal */
+  --color-red-hover: #b81016;  /* Rojo más oscuro para hover */
+  --color-gold: #f1c40f;       /* Dorado/Amarillo brillante para acentos */
+  --color-gold-hover: #d4ac0d; /* Dorado para hover */
+  --text-main: #f5f5f7;        /* Blanco suave de alta legibilidad */
+  --text-muted: #a0a0ab;       /* Gris claro para textos secundarios */
+  --border-color: #26262b;     /* Bordes sutiles oscuros */
+
+  /* Derivados útiles (transparencias para halos/hover/focus) */
+  --color-red-15: rgba(230, 28, 36, 0.15);
+  --color-red-20: rgba(230, 28, 36, 0.2);
+  --color-gold-15: rgba(241, 196, 15, 0.12);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-strong: 0 20px 25px -5px rgba(0, 0, 0, 0.55), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+}
+
 /* --- CONFIGURACIÓN GENERAL --- */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
 
 body {
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f8f9fa;
-  color: #212529;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
 }
 
 .app-shell {
@@ -20,23 +41,23 @@ body {
 
 /* --- NAVBAR MODERNA --- */
 .navbar {
-  background-color: #111827; 
-  color: white;
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
   padding: 18px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  border-bottom: 3px solid #f97316; 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid var(--color-red);
+  box-shadow: var(--shadow-soft);
 }
 
 .nav-brand {
   font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: 0.5px;
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .nav-links {
@@ -46,7 +67,7 @@ body {
 }
 
 .nav-links a {
-  color: #d1d5db;
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -55,8 +76,8 @@ body {
 }
 
 .nav-links a:hover {
-  color: #ffffff;
-  background-color: rgba(249, 115, 22, 0.15); 
+  color: var(--text-main);
+  background-color: var(--color-red-15);
   text-decoration: none;
 }
 
@@ -74,28 +95,30 @@ body {
 }
 
 .dashboard-header {
-  background: #111827; /* Cambiado a gris premium para hacer match con la Navbar */
+  background: var(--bg-secondary);
   padding: 1.5rem 2rem;
   border-radius: 12px;
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-left: 6px solid #f97316;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-left: 6px solid var(--color-red);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-color);
+  border-left: 6px solid var(--color-red);
 }
 
 .header-title-block h1 {
   margin: 0;
   font-size: 1.8rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-main);
   letter-spacing: -0.5px;
 }
 
 .dashboard-header .subtitle {
   margin: 4px 0 0 0;
-  color: #9ca3af;
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 
@@ -105,14 +128,14 @@ body {
 
 .header-user-block .welcome-text {
   display: block;
-  color: #fff;
+  color: var(--text-main);
   font-weight: 700;
   font-size: 0.95rem;
 }
 
 .logout-link-btn {
   background: transparent;
-  color: #f87171;
+  color: var(--color-red);
   border: none;
   cursor: pointer;
   text-decoration: underline;
@@ -123,11 +146,11 @@ body {
 }
 
 .logout-link-btn:hover {
-  color: #fca5a5;
+  color: var(--color-red-hover);
 }
 
 .section-title {
-  color: #111827;
+  color: var(--text-main);
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -141,11 +164,11 @@ body {
 }
 
 .home-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid #e5e7eb;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-color);
   text-align: left;
   position: relative;
   overflow: hidden;
@@ -167,16 +190,16 @@ body {
 
 .home-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.1), 0 4px 6px -2px rgba(249, 115, 22, 0.05);
-  border-color: rgba(249, 115, 22, 0.3);
+  box-shadow: 0 10px 15px -3px var(--color-red-20), 0 4px 6px -2px var(--color-red-15);
+  border-color: var(--color-red);
 }
 
 .home-card:hover::before {
-  background-color: #f97316; 
+  background-color: var(--color-red);
 }
 
 .home-card h2 {
-  color: #111827;
+  color: var(--text-main);
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 10px;
@@ -184,7 +207,7 @@ body {
 
 .home-card p {
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-muted);
   line-height: 1.5;
   margin-bottom: 12px;
 }
@@ -192,7 +215,7 @@ body {
 .metric-value {
   font-size: 2.2rem;
   font-weight: 800;
-  color: #f97316;
+  color: var(--color-gold);
   margin-top: auto;
   display: flex;
   align-items: baseline;
@@ -201,7 +224,7 @@ body {
 
 .metric-label {
   font-size: 0.9rem;
-  color: #6b7280;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -212,7 +235,7 @@ body {
 }
 
 .page-container h1 {
-  color: #111827;
+  color: var(--text-main);
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 20px;
@@ -220,18 +243,18 @@ body {
 
 /* --- FORMULARIOS Y SELECTS COMPARTIDOS --- */
 .form-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 28px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-color);
 }
 
 .form-card h2 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-main);
   margin-bottom: 16px;
 }
 
@@ -242,31 +265,35 @@ body {
   margin-bottom: 16px;
 }
 
-/* 🔄 Inputs y Selectores (Dropdowns de Equipos/Organizadores) unificados */
+/* Inputs y Selectores (Dropdowns de Equipos/Organizadores) unificados */
 .form-grid input,
 .form-grid select {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 0.9rem;
-  color: #212529;
-  background-color: #ffffff;
+  color: var(--text-main);
+  background-color: var(--bg-primary);
   outline: none;
   font-family: inherit;
   height: 42px; /* Altura idéntica garantizada */
 }
 
+.form-grid input::placeholder {
+  color: var(--text-muted);
+}
+
 .form-grid input:focus,
 .form-grid select:focus {
-  border-color: #f97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+  border-color: var(--color-red);
+  box-shadow: 0 0 0 3px var(--color-red-20);
 }
 
 /* Estilo sutil para las opciones dentro del selector */
 .form-grid select option {
-  color: #212529;
-  background-color: #ffffff;
+  color: var(--text-main);
+  background-color: var(--bg-card);
   padding: 8px;
 }
 
@@ -275,13 +302,13 @@ body {
   align-items: center;
   gap: 8px;
   font-size: 0.9rem;
-  color: #4b5563;
+  color: var(--text-muted);
   cursor: pointer;
   height: 42px; /* Alineación vertical con los inputs */
 }
 
 .checkbox-label input[type="checkbox"] {
-  accent-color: #f97316; 
+  accent-color: var(--color-red);
   width: 16px;
   height: 16px;
 }
@@ -294,29 +321,31 @@ body {
 
 .form-actions button {
   padding: 10px 20px;
-  background-color: #f97316; 
-  color: white;
+  background-color: var(--color-red);
+  color: var(--text-main);
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
-  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 2px 4px var(--color-red-20);
   height: 42px;
 }
 
 .form-actions button:hover {
-  background-color: #ea580c; 
-  box-shadow: 0 4px 6px rgba(249, 115, 22, 0.3);
+  background-color: var(--color-red-hover);
+  box-shadow: 0 4px 6px var(--color-red-20);
 }
 
 .form-actions .secondary {
-  background-color: #6b7280;
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
   box-shadow: none;
 }
 
 .form-actions .secondary:hover {
-  background-color: #4b5563;
+  background-color: var(--border-color);
   box-shadow: none;
 }
 
@@ -324,17 +353,17 @@ body {
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-soft);
   font-size: 0.9rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
 }
 
 .data-table th {
-  background-color: #111827; 
-  color: #f97316; 
+  background-color: var(--bg-secondary);
+  color: var(--color-gold);
   padding: 14px 16px;
   font-weight: 600;
   text-align: left;
@@ -342,12 +371,12 @@ body {
 
 .data-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid #f3f4f6;
-  color: #374151;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
 }
 
 .data-table tr:hover {
-  background-color: #fff7ed; 
+  background-color: var(--color-red-15);
 }
 
 .data-table button {
@@ -358,27 +387,27 @@ body {
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 600;
-  background-color: #f3f4f6;
-  color: #111827;
-  border: 1px solid #d1d5db;
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
 .data-table button:hover {
-  background-color: #f97316;
-  color: white;
-  border-color: #f97316;
+  background-color: var(--color-red);
+  color: var(--text-main);
+  border-color: var(--color-red);
 }
 
 .data-table button.danger {
-  background-color: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fca5a5;
+  background-color: transparent;
+  color: var(--color-red);
+  border: 1px solid var(--color-red);
 }
 
 .data-table button.danger:hover {
-  background-color: #dc2626;
-  color: white;
-  border-color: #dc2626;
+  background-color: var(--color-red);
+  color: var(--text-main);
+  border-color: var(--color-red);
 }
 
 /* --- VISTA INDEPENDIENTE DE LOGIN (PANTALLA COMPLETA) --- */
@@ -387,27 +416,534 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #111827; /* Fondo oscuro premium acorde al ambiente gaming */
+  background-color: var(--bg-primary);
 }
 
 .login-form {
   padding: 2.5rem;
-  background: #1f2937; /* Gris un poco más claro para contraste */
+  background: var(--bg-card);
   border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-strong);
   width: 360px;
-  border-top: 4px solid #f97316;
+  border-top: 4px solid var(--color-red);
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--color-red);
 }
 
 /* --- ESTADOS DE CARGA Y MENSAJES --- */
 .status-message {
   text-align: center;
   padding: 48px;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 1rem;
 }
 
 .status-message.error {
-  color: #dc2626;
+  color: var(--color-red);
   font-weight: 600;
+}
+
+/* Contenedor principal de la página de Login */
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+/* Tarjeta del formulario */
+.login-card-form {
+  padding: 2.5rem;
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: var(--shadow-strong);
+  width: 340px;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+/* Título dorado característico */
+.login-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--color-gold);
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+/* Contenedor de inputs */
+.form-group-field {
+  margin-bottom: 1.5rem;
+}
+
+.form-field-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.form-field-input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  box-sizing: border-box;
+}
+
+.form-field-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-field-input:focus {
+  outline: none;
+  border-color: var(--color-red);
+  box-shadow: 0 0 0 3px var(--color-red-20);
+}
+
+/* Botón interactivo */
+.login-action-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-red);
+  color: var(--text-main);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background 0.2s ease;
+}
+
+.login-action-button:hover {
+  background: var(--color-red-hover);
+}
+
+.login-action-button:disabled {
+  background: var(--border-color);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Contenedor del texto inferior para alternar entre pantallas */
+.auth-switch-text {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  color: var(--text-muted);
+}
+
+/* Enlace interactivo con el color dorado del proyecto */
+.auth-switch-link {
+  color: var(--color-gold);
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.auth-switch-link:hover {
+  color: var(--color-gold-hover);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   ESTILOS PARA LA PÁGINA DE EQUIPOS (TeamsPage)
+   ========================================================================== */
+
+/* Contenedor general */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Tarjeta del formulario */
+.form-card {
+  background-color: #1e2025;
+  border: 1px solid #2e323b;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 30px;
+}
+
+.form-card h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+/* Grilla del formulario */
+.form-grid-custom {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Input de texto */
+.custom-input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #121316;
+  border: 1px solid #3f444e;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.custom-input:focus {
+  border-color: #535bf2;
+}
+
+/* --- SUBIDA DE LOGO (Estilo oculto y botón falso) --- */
+.logo-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Oculta el input original de HTML */
+.file-input-hidden {
+  display: none !important;
+}
+
+/* Diseña el Label como un botón moderno */
+.file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 16px;
+  background-color: #2a2d34;
+  color: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #3f444e;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.file-upload-btn:hover {
+  background-color: #3f444e;
+  border-color: #535bf2;
+}
+
+.file-upload-icon-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Previsualización del Logo */
+.preview-container {
+  position: relative;
+  display: inline-block;
+}
+
+.logo-preview-img {
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #3f444e;
+}
+
+.remove-logo {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Checkbox */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #b3b3b3;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Acciones del formulario */
+.form-actions-custom {
+  display: flex;
+  gap: 12px;
+}
+
+.primary-btn {
+  background-color: #535bf2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+  background-color: #4349cc;
+}
+
+.secondary-btn {
+  background-color: #2a2d34;
+  color: white;
+  border: 1px solid #3f444e;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.secondary-btn:hover {
+  background-color: #3f444e;
+}
+
+/* --- TABLA DE DATOS --- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #1e2025;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #2e323b;
+}
+
+.data-table th, 
+.data-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #2e323b;
+}
+
+.data-table th {
+  background-color: #17181c;
+  color: #8f94a0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Identidad del Equipo (Logo + Nombre) en la tabla */
+.team-identity-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.team-table-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #3f444e;
+}
+
+.team-table-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #535bf2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.team-table-name {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* Badges y listas dentro de la tabla */
+.captain-badge {
+  background-color: #332a15;
+  color: #f1a80a;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #4d3d1f;
+}
+
+.members-inline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.members-inline-list li {
+  background-color: #121316;
+  border: 1px solid #2e323b;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #e0e0e0;
+}
+
+.no-members {
+  color: #707580;
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* Estado Activo / Inactivo */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background-color: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-badge.inactive {
+  background-color: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+/* Botones de acción en la tabla */
+.actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn {
+  background-color: transparent;
+  color: #535bf2;
+  border: 1px solid #535bf2;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.edit-btn:hover {
+  background-color: #535bf2;
+  color: white;
+}
+
+.delete-btn {
+  background-color: transparent;
+  color: #ff4d4f;
+  border: 1px solid #ff4d4f;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.readonly-text {
+  color: #707580;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Sección de selección de integrantes */
+.members-selection-section {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #2e323b;
+}
+
+.members-selection-section h3 {
+  font-size: 1.1rem;
+  color: #8f94a0;
+  margin-bottom: 15px;
+}
+
+/* Grilla de checkboxes */
+.members-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #121316;
+  border-radius: 8px;
+  border: 1px solid #2e323b;
+}
+
+/* Tarjeta individual de usuario seleccionable */
+.member-checkbox-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background-color: #1e2025;
+  border: 1px solid #2e323b;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.member-checkbox-card:hover {
+  border-color: #535bf2;
+  background-color: #24272e;
+}
+
+.member-checkbox-card input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.member-checkbox-card span {
+  font-size: 13.5px;
+  color: #ffffff;
+}
+
+.no-members-text {
+  color: #707580;
+  font-style: italic;
+  font-size: 13px;
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 10px;
 }

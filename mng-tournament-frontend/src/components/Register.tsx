@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Auth.css'; // Importación de los estilos separados
 
-interface LoginProps {
-  onLoginSuccess: (token: string) => void;
-}
-
-export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+export const Register: React.FC = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,55 +15,49 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/api-token-auth/', {
+      const response = await fetch('http://localhost:8000/api/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, email, password }),
       });
 
       if (!response.ok) {
-        throw new Error('Credenciales incorrectas. Intenta nuevamente.');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'No se pudo completar el registro.');
       }
 
-      const data = await response.json();
-      
-      // 1. Ejecutar el callback que se pasa por props
-      onLoginSuccess(data.token);
-
-      // 2. Guardar el token en el almacenamiento local
-      localStorage.setItem('token', data.token);
-
-      // 3. Guardar el ID del usuario (admite 'user_id' o 'id' dependiendo de cómo responda tu Django)
-      const userId = data.user_id || data.id;
-      if (userId) {
-        localStorage.setItem('userId', userId.toString());
-      }
-
-      // 4. Guardar si el usuario es administrador
-      if (data.is_admin !== undefined) {
-        localStorage.setItem('isAdmin', data.is_admin.toString());
-      } else {
-        localStorage.setItem('isAdmin', 'false'); // Valor por defecto en caso de no venir en la respuesta
-      }
-
-      navigate('/');
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (err: any) {
-      setError(err.message || 'Hubo un problema al conectar con el servidor.');
+      setError(err.message);
     }
   };
 
   return (
     <div className="auth-container">
-      <h2 className="auth-title">Iniciar Sesión</h2>
+      <h2 className="auth-title">Crear una Cuenta</h2>
       {error && <p className="auth-error">{error}</p>}
+      {success && <p className="auth-success">¡Registro exitoso! Redirigiendo...</p>}
       
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="auth-field">
-          <label className="auth-label">Usuario</label>
+          <label className="auth-label">Usuario / Gamertag</label>
           <input 
             type="text" 
             value={username} 
             onChange={(e) => setUsername(e.target.value)}
+            required
+            className="auth-input"
+          />
+        </div>
+        <div className="auth-field">
+          <label className="auth-label">Correo Electrónico</label>
+          <input 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)}
             required
             className="auth-input"
           />
@@ -81,11 +73,11 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           />
         </div>
         <button type="submit" className="auth-submit-btn">
-          Entrar
+          Registrarse
         </button>
       </form>
       <p className="auth-footer-text">
-        ¿No tienes cuenta? <Link to="/register" className="auth-link">Regístrate aquí</Link>
+        ¿Ya tienes cuenta? <Link to="/login" className="auth-link">Inicia sesión aquí</Link>
       </p>
     </div>
   );

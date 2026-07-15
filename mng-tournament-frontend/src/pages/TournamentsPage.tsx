@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Tournament } from '../types/tournament'
+import type { Tournament, TeamTournament } from '../types/tournament'
 import {
   useCreateResource,
   useDeleteResource,
@@ -19,15 +19,34 @@ const emptyForm = {
   organizer: '' as unknown as number,
 }
 
-export function TournamentsPage() {
+interface TournamentsPageProps {
+  isAdmin: boolean;
+}
+
+export function TournamentsPage({ isAdmin }: TournamentsPageProps) {
   const { data: tournaments, isLoading, isError } = useResourceList<Tournament>(RESOURCE);
   const { data: organizers } = useResourceList<any>('organizers');
+  
+  // 1. Obtenemos todos los equipos del sistema
+  const { data: allTeams } = useResourceList<any>('teams');
+
+  // 2. Recuperamos el ID del usuario logueado
+  // Nota: Ajusta 'userId' al nombre exacto de la llave que usas en tu App.tsx para guardar el ID del usuario logueado
+  const loggedInUserId = Number(localStorage.getItem('userId')); 
+
+  // 3. Filtramos los equipos en el frontend para mostrar SOLO aquellos donde el usuario es el Capitán
+  const myCaptainedTeams = allTeams?.filter((team: any) => Number(team.captain) === loggedInUserId) || [];
+
   const createMutation = useCreateResource<Tournament>(RESOURCE)
   const updateMutation = useUpdateResource<Tournament>(RESOURCE)
   const deleteMutation = useDeleteResource(RESOURCE)
+  const registerMutation = useCreateResource<TeamTournament>('team-tournaments')
 
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState<number | null>(null)
+  
+  const [selectedTournamentId, setSelectedTournamentId] = useState<number | null>(null)
+  const [selectedTeamId, setSelectedTeamId] = useState<number | "">("")
 
   function handleChange(field: string, value: string | number | boolean) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -89,9 +108,30 @@ export function TournamentsPage() {
   }
 
   function handleDelete(id: number) {
-    if (confirm('Esta seguro de eliminar este torneo?')) {
+    if (confirm('¿Está seguro de eliminar este torneo?')) {
       deleteMutation.mutate(id)
     }
+  }
+
+  function handleRegisterTeam() {
+    if (!selectedTournamentId || !selectedTeamId) {
+      alert("Por favor selecciona un equipo válido.");
+      return;
+    }
+
+    registerMutation.mutate(
+      { team: Number(selectedTeamId), tournament: selectedTournamentId },
+      {
+        onSuccess: () => {
+          alert("¡Equipo inscrito con éxito!");
+          setSelectedTournamentId(null);
+          setSelectedTeamId("");
+        },
+        onError: (err: any) => {
+          alert(`Error al inscribir: ${err.message || "Verifica si ya estás inscrito o si eres el capitán."}`);
+        }
+      }
+    );
   }
 
   if (isLoading) return <div className="status-message">Cargando torneos...</div>
@@ -100,77 +140,122 @@ export function TournamentsPage() {
   return (
     <div className="page-container">
       <h1>Torneos</h1>
-
-      <div className="form-card">
-        <h2>{editingId ? 'Editar Torneo' : 'Nuevo Torneo'}</h2>
-        <div className="form-grid">
-          <input
-            placeholder="Nombre del juego"
-            value={form.gameName}
-            onChange={(e) => handleChange('gameName', e.target.value)}
-          />
-          <input
-            placeholder="Titulo del torneo"
-            value={form.tournamentTitle}
-            onChange={(e) => handleChange('tournamentTitle', e.target.value)}
-          />
-          <input
-            placeholder="Premio virtual"
-            value={form.virtualPrize}
-            onChange={(e) => handleChange('virtualPrize', e.target.value)}
-          />
-          <input
-            type="number"
-            min="0"
-            placeholder="Maximo de participantes"
-            value={form.maxParticipants || ''} // Usar '' evita que se quede un cero molesto por defecto
-            onChange={(e) => handleChange('maxParticipants', Number(e.target.value))}
-          />
-          <input
-            type="date"
-            value={form.eventDate}
-            onChange={(e) => handleChange('eventDate', e.target.value)}
-          />
-          <select
-            value={form.organizer || ''}
-            onChange={(e) => handleChange('organizer', e.target.value ? Number(e.target.value) : '')}
-            className="form-select" // Añade tu clase CSS si tienes estilos listos
-          >
-            <option value="">-- Seleccione un Organizador --</option>
-            {organizers?.map((org: any) => (
-              <option key={org.id} value={org.id}>
-                {org.organizationName}
-              </option>
-            ))}
-          </select>
-
-          <label className="checkbox-label">
+      
+      {isAdmin && (
+        <div className="form-card">
+          <h2>{editingId ? 'Editar Torneo' : 'Nuevo Torneo'}</h2>
+          <div className="form-grid">
             <input
-              type="checkbox"
-              checked={form.status}
-              onChange={(e) => handleChange('status', e.target.checked)}
+              placeholder="Nombre del juego"
+              value={form.gameName}
+              onChange={(e) => handleChange('gameName', e.target.value)}
             />
-            Activo
-          </label>
+            <input
+              placeholder="Título del torneo"
+              value={form.tournamentTitle}
+              onChange={(e) => handleChange('tournamentTitle', e.target.value)}
+            />
+            <input
+              placeholder="Premio virtual"
+              value={form.virtualPrize}
+              onChange={(e) => handleChange('virtualPrize', e.target.value)}
+            />
+            <input
+              type="number"
+              min="0"
+              placeholder="Máximo de participantes"
+              value={form.maxParticipants || ''}
+              onChange={(e) => handleChange('maxParticipants', Number(e.target.value))}
+            />
+            <input
+              type="date"
+              value={form.eventDate}
+              onChange={(e) => handleChange('eventDate', e.target.value)}
+            />
+            <select
+              value={form.organizer || ''}
+              onChange={(e) => handleChange('organizer', e.target.value ? Number(e.target.value) : '')}
+              className="form-select"
+            >
+              <option value="">-- Seleccione un Organizador --</option>
+              {organizers?.map((org: any) => (
+                <option key={org.id} value={org.id}>
+                  {org.organizationName}
+                </option>
+              ))}
+            </select>
+
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={form.status}
+                onChange={(e) => handleChange('status', e.target.checked)}
+              />
+              Activo
+            </label>
+          </div>
+          <div className="form-actions">
+            <button onClick={handleSubmit}>{editingId ? 'Actualizar' : 'Crear'}</button>
+            {editingId && <button onClick={handleCancel} className="secondary">Cancelar</button>}
+          </div>
         </div>
-        <div className="form-actions">
-          <button onClick={handleSubmit}>{editingId ? 'Actualizar' : 'Crear'}</button>
-          {editingId && <button onClick={handleCancel} className="secondary">Cancelar</button>}
+      )}
+
+      {/* MODAL / SECCIÓN DE INSCRIPCIÓN */}
+      {selectedTournamentId !== null && (
+        <div className="form-card" style={{ marginTop: '20px', borderColor: '#4a90e2' }}>
+          <h2>Inscribir un Equipo al Torneo #{selectedTournamentId}</h2>
+          
+          {myCaptainedTeams.length > 0 ? (
+            <>
+              <div className="form-grid" style={{ gridTemplateColumns: '1fr' }}>
+                <select
+                  value={selectedTeamId}
+                  onChange={(e) => setSelectedTeamId(e.target.value ? Number(e.target.value) : "")}
+                  className="form-select"
+                >
+                  <option value="">-- Selecciona uno de tus Equipos --</option>
+                  {myCaptainedTeams.map((team: any) => (
+                    <option key={team.id} value={team.id}>
+                      {team.teamName} (ID: {team.id})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-actions" style={{ marginTop: '15px' }}>
+                <button onClick={handleRegisterTeam} disabled={registerMutation.isPending}>
+                  {registerMutation.isPending ? 'Inscribiendo...' : 'Confirmar Inscripción'}
+                </button>
+                <button onClick={() => { setSelectedTournamentId(null); setSelectedTeamId(""); }} className="secondary">
+                  Cancelar
+                </button>
+              </div>
+            </>
+          ) : (
+            <div>
+              <p style={{ color: '#d9534f', marginBottom: '15px' }}>
+                No eres capitán de ningún equipo. Solo los capitanes pueden inscribir equipos a los torneos.
+              </p>
+              <button onClick={() => { setSelectedTournamentId(null); setSelectedTeamId(""); }} className="secondary">
+                Cerrar
+              </button>
+            </div>
+          )}
         </div>
-      </div>
+      )}
 
       <table className="data-table">
         <thead>
           <tr>
             <th>ID</th>
             <th>Juego</th>
-            <th>Titulo</th>
+            <th>Título</th>
             <th>Premio</th>
             <th>Max. Part.</th>
             <th>Fecha</th>
             <th>Organizador</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th>Acciones</th> 
           </tr>
         </thead>
         <tbody>
@@ -185,8 +270,21 @@ export function TournamentsPage() {
               <td>{t.organizer_detail?.organizationName || 'Sin Organizador'}</td>
               <td>{t.status ? 'Activo' : 'Inactivo'}</td>
               <td>
-                <button onClick={() => handleEdit(t)}>Editar</button>
-                <button onClick={() => handleDelete(t.id)} className="danger">Eliminar</button>
+                <div className="admin-actions">
+                  {isAdmin ? (
+                    <>
+                      <button onClick={() => handleEdit(t)}>Editar</button>
+                      <button onClick={() => handleDelete(t.id)}>Eliminar</button>
+                    </>
+                  ) : (
+                    <button 
+                      onClick={() => setSelectedTournamentId(t.id)} 
+                      className="primary"
+                    >
+                      Inscribir Equipo
+                    </button>
+                  )}
+                </div>
               </td>
             </tr>
           ))}
