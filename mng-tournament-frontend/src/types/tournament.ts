@@ -27,6 +27,7 @@ export interface Player {
   team_detail?: Team;
   created?: string
   modified?: string
+  role?: string;
 }
 
 export interface Tournament {
