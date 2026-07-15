@@ -137,12 +137,12 @@ export function PlayersPage() {
   function getRoleLabel(role: string) {
     switch (role) {
       case 'admin':
-        return '👑 Administrador'
+        return ' Administrador'
       case 'captain':
-        return '⚽ Capitán'
+        return ' Capitán'
       case 'player':
       default:
-        return '👤 Jugador'
+        return ' Jugador'
     }
   }
 

@@ -174,7 +174,7 @@ const { data: users } = useResourceList(USERS_RESOURCE)
                   onChange={handleFileChange} 
                   className="file-input-hidden" 
                 />
-                <span className="file-upload-icon-text">📁 Seleccionar Logo</span>
+                <span className="file-upload-icon-text"> Seleccionar Logo</span>
               </label>
               
               {form.logoUrl && (

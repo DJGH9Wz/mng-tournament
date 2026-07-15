@@ -6,7 +6,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
     throw new Error(`Error en la petición: ${response.status} ${response.statusText}`);
   }
   if (response.status === 204) {
-    
+
     return undefined as unknown as T;
   }
   return response.json() as Promise<T>;
@@ -14,7 +14,6 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 // Genera las cabeceras inyectando el Token guardado por App.tsx
 function getAuthHeaders(): HeadersInit {
-  // Usamos 'token' para coincidir exactamente con lo guardado en tu App.tsx
   const token = localStorage.getItem('token'); 
   return {
     'Content-Type': 'application/json',
