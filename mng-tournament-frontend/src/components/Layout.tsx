@@ -1,119 +1,90 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
-interface TournamentRegistration {
-  id: number;
-  name: string;
-  status: string;
-}
-
-// Interfaz para la información que realmente viene de Django
-interface UserData {
-  username: string;
-  email: string;
-  is_staff: boolean;
-  tournaments?: TournamentRegistration[]; // Opcional por si deseas agregarlo después en Django
-}
-
-interface LayoutProps {
-  isLoggedIn: boolean;
-  user: UserData | null; // Recibe el usuario actual o null desde App.tsx
-  onLogout: () => void;
-  children: React.ReactNode;
-}
-
-export const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, user, onLogout }) => {
+export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isLoggedIn, profile, logout } = useAuth();
 
-  // Obtener la inicial del nombre usando directamente el prop "user"
+  const role = profile?.role
+  const isAdmin = role === 'admin'
+  const isCaptain = role === 'captain'
+  const isPlayer = role === 'player'
+
+  const isActive = (path: string) => location.pathname === path ? 'nav-link active' : 'nav-link'
+
   const getInitial = () => {
-    if (!user?.username) return '?';
-    return user.username.charAt(0).toUpperCase();
+    if (!profile?.gamertag) return '?';
+    return profile.gamertag.charAt(0).toUpperCase();
   };
-
-  const isAdmin = user?.is_staff || false;
 
   return (
     <div className="app-container">
-      {/* Barra de Navegación Superior */}
       <header className="main-header">
         <div className="logo-section">
-          <span className="logo-unsa">UNSA</span>
-          <span className="logo-sub">Torneos</span>
+          <span className="logo-unsa">MNG</span>
+          <span className="logo-sub">Tournament</span>
         </div>
         <nav className="top-nav">
-          <Link to="/" className="nav-link">Inicio</Link>
-          <Link to="/tournaments" className="nav-link">Torneos</Link>
-          
-          {/* Al quitar el div contenedor, los enlaces se alinean y separan perfectamente */}
+          <Link to="/" className={isActive('/')}>Inicio</Link>
+          <Link to="/tournaments" className={isActive('/tournaments')}>Torneos</Link>
+
+          {isLoggedIn && isCaptain && (
+            <>
+              <Link to="/my-team" className={isActive('/my-team')}>Mi Equipo</Link>
+              <Link to="/invitations" className={isActive('/invitations')}>Invitaciones</Link>
+            </>
+          )}
+
+          {isLoggedIn && isPlayer && (
+            <Link to="/invitations" className={isActive('/invitations')}>Invitaciones</Link>
+          )}
+
           {isLoggedIn && isAdmin && (
             <>
-              <Link to="/organizers" className="nav-link">Organizadores</Link>
-              <Link to="/players" className="nav-link">Jugadores</Link>
-              <Link to="/teams" className="nav-link">Equipos</Link>
-              <Link to="/registrations" className="nav-link">Inscripciones</Link>
+              <Link to="/organizers" className={isActive('/organizers')}>Organizadores</Link>
+              <Link to="/players" className={isActive('/players')}>Jugadores</Link>
+              <Link to="/teams" className={isActive('/teams')}>Equipos</Link>
+              <Link to="/registrations" className={isActive('/registrations')}>Inscripciones</Link>
             </>
           )}
         </nav>
       </header>
 
       <div className="main-layout">
-        {/* Pantalla Central (Contenido Principal) */}
         <main className="content-area">
           {children}
         </main>
 
-        {/* Barra Lateral Derecha (Sidebar de Usuario) */}
         <aside className="right-sidebar">
-          {isLoggedIn && user ? (
+          {isLoggedIn && profile ? (
             <div className="profile-card">
               <div className="user-avatar-container">
                 <div className="user-avatar">{getInitial()}</div>
                 {isAdmin && <span className="badge-admin">Admin</span>}
+                {isCaptain && <span className="badge-captain">Cap</span>}
               </div>
               
-              <h3 className="user-gamertag">@{user.username}</h3>
-              <p className="user-email">{user.email}</p>
+              <h3 className="user-gamertag">@{profile.gamertag}</h3>
+              <p className="user-email">{profile.email}</p>
+              {profile.team_name && (
+                <p className="user-team">Equipo: {profile.team_name}</p>
+              )}
 
               <hr className="divider" />
 
-              {/* Sección Mis Torneos */}
               <div className="sidebar-section">
-                <h4>🏆 Mis Torneos</h4>
-                {user.tournaments && user.tournaments.length > 0 ? (
-                  <ul className="sidebar-list">
-                    {user.tournaments.map((t) => (
-                      <li key={t.id} className="sidebar-list-item">
-                        <span className="tournament-dot"></span>
-                        <div className="tournament-info">
-                          <p className="t-name">{t.name}</p>
-                          <span className="t-status">{t.status}</span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="empty-text">No estás inscrito en ningún torneo todavía.</p>
-                )}
+                <h4>Rol</h4>
+                <p className="role-text">
+                  {isAdmin && 'Administrador'}
+                  {isCaptain && 'Capitán'}
+                  {isPlayer && 'Jugador'}
+                </p>
               </div>
 
-              {/* Sección Mis Estadísticas rápidas */}
-              <div className="sidebar-section">
-                <h4>📊 Estadísticas UNSA</h4>
-                <div className="stats-grid">
-                  <div className="stat-box">
-                    <span className="stat-num">0</span>
-                    <span className="stat-label">PJ</span>
-                  </div>
-                  <div className="stat-box">
-                    <span className="stat-num">0%</span>
-                    <span className="stat-label">Victorias</span>
-                  </div>
-                </div>
-              </div>
-
-              <button className="logout-btn" onClick={onLogout}>
+              <button className="logout-btn" onClick={logout}>
                 Cerrar Sesión
               </button>
             </div>

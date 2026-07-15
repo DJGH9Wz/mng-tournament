@@ -5,7 +5,7 @@ import {
   useDeleteResource,
   useResourceList,
   useUpdateResource,
-} from '../hooks/useResource'
+} from '../hooks'
 
 const RESOURCE = 'player-tournaments'
 

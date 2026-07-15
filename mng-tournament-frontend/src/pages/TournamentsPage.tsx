@@ -5,7 +5,8 @@ import {
   useDeleteResource,
   useResourceList,
   useUpdateResource,
-} from '../hooks/useResource'
+} from '../hooks'
+import { useAuth } from '../context/AuthContext'
 
 const RESOURCE = 'tournaments'
 
@@ -20,10 +21,13 @@ const emptyForm = {
 }
 
 interface TournamentsPageProps {
-  isAdmin: boolean;
+  isAdmin?: boolean;
 }
 
-export function TournamentsPage({ isAdmin }: TournamentsPageProps) {
+export function TournamentsPage(_props?: TournamentsPageProps) {
+  const { profile } = useAuth();
+  const isAdmin = profile?.role === 'admin';
+  const isCaptain = profile?.role === 'captain';
   const { data: tournaments, isLoading, isError } = useResourceList<Tournament>(RESOURCE);
   const { data: organizers } = useResourceList<any>('organizers');
   
@@ -201,46 +205,74 @@ export function TournamentsPage({ isAdmin }: TournamentsPageProps) {
         </div>
       )}
 
-      {/* MODAL / SECCIÓN DE INSCRIPCIÓN */}
+      {/* MODAL DE INSCRIPCIÓN */}
       {selectedTournamentId !== null && (
-        <div className="form-card" style={{ marginTop: '20px', borderColor: '#4a90e2' }}>
-          <h2>Inscribir un Equipo al Torneo #{selectedTournamentId}</h2>
-          
-          {myCaptainedTeams.length > 0 ? (
-            <>
-              <div className="form-grid" style={{ gridTemplateColumns: '1fr' }}>
-                <select
-                  value={selectedTeamId}
-                  onChange={(e) => setSelectedTeamId(e.target.value ? Number(e.target.value) : "")}
-                  className="form-select"
-                >
-                  <option value="">-- Selecciona uno de tus Equipos --</option>
-                  {myCaptainedTeams.map((team: any) => (
-                    <option key={team.id} value={team.id}>
-                      {team.teamName} (ID: {team.id})
-                    </option>
-                  ))}
-                </select>
+        <div className="modal-overlay" onClick={() => { setSelectedTournamentId(null); setSelectedTeamId(""); }}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h2>Inscribir Equipo al Torneo</h2>
+            <p className="modal-subtitle">
+              Torneo #{selectedTournamentId}
+            </p>
+
+            {myCaptainedTeams.length > 0 ? (
+              <>
+                <div className="modal-field">
+                  <label>Selecciona tu equipo</label>
+                  <select
+                    value={selectedTeamId}
+                    onChange={(e) => setSelectedTeamId(e.target.value ? Number(e.target.value) : "")}
+                    className="form-select"
+                  >
+                    <option value="">-- Selecciona uno de tus equipos --</option>
+                    {myCaptainedTeams.map((team: any) => (
+                      <option key={team.id} value={team.id}>
+                        {team.teamName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {selectedTeamId && (
+                  <div className="modal-warning">
+                    <p>
+                      Al inscribir tu equipo, la plantilla actual se <strong>congelará</strong> para este evento.
+                      No podrás modificar integrantes hasta que finalice el torneo.
+                    </p>
+                  </div>
+                )}
+
+                <div className="modal-actions">
+                  <button
+                    onClick={handleRegisterTeam}
+                    disabled={!selectedTeamId || registerMutation.isPending}
+                    className="modal-confirm"
+                  >
+                    {registerMutation.isPending ? 'Inscribiendo...' : 'Confirmar Inscripción'}
+                  </button>
+                  <button
+                    onClick={() => { setSelectedTournamentId(null); setSelectedTeamId(""); }}
+                    className="modal-cancel"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="modal-warning">
+                <p>
+                  No eres capitán de ningún equipo. Solo los capitanes pueden inscribir equipos.
+                </p>
+                <div className="modal-actions">
+                  <button
+                    onClick={() => { setSelectedTournamentId(null); setSelectedTeamId(""); }}
+                    className="modal-cancel"
+                  >
+                    Cerrar
+                  </button>
+                </div>
               </div>
-              <div className="form-actions" style={{ marginTop: '15px' }}>
-                <button onClick={handleRegisterTeam} disabled={registerMutation.isPending}>
-                  {registerMutation.isPending ? 'Inscribiendo...' : 'Confirmar Inscripción'}
-                </button>
-                <button onClick={() => { setSelectedTournamentId(null); setSelectedTeamId(""); }} className="secondary">
-                  Cancelar
-                </button>
-              </div>
-            </>
-          ) : (
-            <div>
-              <p style={{ color: '#d9534f', marginBottom: '15px' }}>
-                No eres capitán de ningún equipo. Solo los capitanes pueden inscribir equipos a los torneos.
-              </p>
-              <button onClick={() => { setSelectedTournamentId(null); setSelectedTeamId(""); }} className="secondary">
-                Cerrar
-              </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 

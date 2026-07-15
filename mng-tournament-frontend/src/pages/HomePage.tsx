@@ -1,20 +1,18 @@
-import { useResourceList } from '../hooks/useResource'
+import { useResourceList } from '../hooks'
+import { useAuth } from '../context/AuthContext'
 import type { Tournament, Organizer, Team, Player, PlayerTournament } from '../types/tournament'
 
 export function HomePage() {
+  const { isLoggedIn, profile, logout } = useAuth()
   const { data: tournaments } = useResourceList<Tournament>('tournaments')
   const { data: organizers } = useResourceList<Organizer>('organizers')
   const { data: teams } = useResourceList<Team>('teams')
   const { data: players } = useResourceList<Player>('players')
   const { data: registrations } = useResourceList<PlayerTournament>('player-tournaments')
 
-  const savedUser = localStorage.getItem('auth_user')
-  const user = savedUser ? JSON.parse(savedUser) : null
-
   function handleLogout() {
     if (confirm('¿Deseas cerrar la sesión activa?')) {
-      localStorage.clear()
-      window.location.href = '/'
+      logout()
     }
   }
 
@@ -30,9 +28,9 @@ export function HomePage() {
           <h1>Sistema de Gestión de Torneos</h1>
           <p className="subtitle">Escuela Profesional de Ingeniería de Sistemas — EPIS</p>
         </div>
-        {user && (
+        {isLoggedIn && profile && (
           <div className="header-user-block">
-            <span className="welcome-text"> Bienvenido, {user.username}</span>
+            <span className="welcome-text"> Bienvenido, {profile.gamertag}</span>
             <button onClick={handleLogout} className="logout-link-btn">
               Cerrar Sesión
             </button>

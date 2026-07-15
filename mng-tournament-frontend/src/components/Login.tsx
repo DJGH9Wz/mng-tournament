@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './Auth.css'; // Importación de los estilos separados
+import { useAuth } from '../context/AuthContext';
+import './Auth.css';
 
-interface LoginProps {
-  onLoginSuccess: (token: string) => void;
-}
-
-export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/api-token-auth/', {
+      const response = await fetch('http://localhost:8000/api/api-token-auth/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -28,26 +26,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       }
 
       const data = await response.json();
-      
-      // 1. Ejecutar el callback que se pasa por props
-      onLoginSuccess(data.token);
-
-      // 2. Guardar el token en el almacenamiento local
-      localStorage.setItem('token', data.token);
-
-      // 3. Guardar el ID del usuario (admite 'user_id' o 'id' dependiendo de cómo responda tu Django)
-      const userId = data.user_id || data.id;
-      if (userId) {
-        localStorage.setItem('userId', userId.toString());
-      }
-
-      // 4. Guardar si el usuario es administrador
-      if (data.is_admin !== undefined) {
-        localStorage.setItem('isAdmin', data.is_admin.toString());
-      } else {
-        localStorage.setItem('isAdmin', 'false'); // Valor por defecto en caso de no venir en la respuesta
-      }
-
+      await login(data.token);
       navigate('/');
     } catch (err: any) {
       setError(err.message || 'Hubo un problema al conectar con el servidor.');

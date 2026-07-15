@@ -65,3 +65,37 @@ export async function deleteOne(resource: string, id: number): Promise<void> {
   });
   return handleResponse<void>(response);
 }
+
+export async function searchPlayers(q: string) {
+  const response = await fetch(`${API_BASE_URL}/players/search/?q=${encodeURIComponent(q)}`, {
+    method: 'GET',
+    headers: getAuthHeaders()
+  });
+  return handleResponse<{ id: number; gamertag: string; email: string; rank: string | null; team: number | null; team_name: string | null }[]>(response);
+}
+
+export async function sendInvitation(team: number, player: number) {
+  const response = await fetch(`${API_BASE_URL}/invitations/send/`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ team, player })
+  });
+  return handleResponse<any>(response);
+}
+
+export async function getMyInvitations() {
+  const response = await fetch(`${API_BASE_URL}/invitations/mine/`, {
+    method: 'GET',
+    headers: getAuthHeaders()
+  });
+  return handleResponse<any[]>(response);
+}
+
+export async function respondInvitation(id: number, action: 'accept' | 'reject') {
+  const response = await fetch(`${API_BASE_URL}/invitations/${id}/respond/`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ action })
+  });
+  return handleResponse<any>(response);
+}

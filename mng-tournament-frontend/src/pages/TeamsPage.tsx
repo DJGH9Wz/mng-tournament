@@ -5,22 +5,24 @@ import {
   useDeleteResource,
   useResourceList,
   useUpdateResource,
-} from '../hooks/useResource'
+} from '../hooks'
+import { useAuth } from '../context/AuthContext'
+
 
 const RESOURCE = 'teams'
-// CAMBIO CLAVE: Cambiamos 'users' a 'players' porque así está registrado en el router de Django
 const USERS_RESOURCE = 'players' 
 
 const emptyForm = {
   teamName: '',
   logoUrl: '',
   status: true,
-  members: [] as number[], // Guardará los IDs de los integrantes seleccionados
+  captain: 0, // Ahora el capitán es parte del formulario
+  members: [] as number[], 
 }
 
 export function TeamsPage() {
+  const { profile } = useAuth()
   const { data, isLoading, isError } = useResourceList<any>(RESOURCE)
-  // Cargamos todos los usuarios/jugadores (players) para poder seleccionarlos
   const { data: users } = useResourceList<any>(USERS_RESOURCE)
 
   console.log("Jugadores recibidos de Django:", users)
@@ -32,8 +34,12 @@ export function TeamsPage() {
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState<number | null>(null)
 
-  const loggedInUserId = Number(localStorage.getItem('userId'))
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const loggedInUserId = profile?.id || 0
+  const isAdmin = profile?.role === 'admin'
+
+  // El usuario puede crear equipos si está logueado.
+  // Pero solo puede EDITAR si es Admin o si es el Capitán actual del equipo en edición.
+  const canUserCreateOrEdit = !editingId ? !!loggedInUserId : (form.captain === loggedInUserId || isAdmin)
 
   function handleChange(field: string, value: any) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -66,15 +72,23 @@ export function TeamsPage() {
       return
     }
 
-    // NUEVA VALIDACIÓN: Obligar a registrar un mínimo de 2 integrantes seleccionados
-    if (form.members.length < 2) {
-      alert("Debes seleccionar un mínimo de 2 integrantes para poder crear o actualizar el equipo.")
+    // El capitán elegido en el formulario (o el usuario logueado por defecto si no se seleccionó)
+    const finalCaptainId = form.captain || loggedInUserId;
+
+    // Validación de integrantes mínimos (Capitán + al menos 1 miembro asignado, o 2 miembros adicionales)
+    // Para asegurar que haya un mínimo de 2 personas en total en el equipo:
+    const totalUniqueParticipants = new Set([finalCaptainId, ...form.members]);
+    if (totalUniqueParticipants.size < 2) {
+      alert("El equipo debe tener un mínimo de 2 integrantes en total (incluyendo al capitán).")
       return
     }
 
     const payload = {
-      ...form,
-      captain: loggedInUserId,
+      teamName: form.teamName,
+      logoUrl: form.logoUrl,
+      status: form.status,
+      captain: finalCaptainId, // Enviamos el capitán designado en el formulario
+      members: form.members,
     }
 
     if (editingId) {
@@ -86,13 +100,19 @@ export function TeamsPage() {
             setEditingId(null)
             alert("Equipo actualizado correctamente.")
           },
+          onError: (err: any) => {
+            alert("Error al actualizar: " + (err.message || "Error desconocido"))
+          },
         }
       )
     } else {
       createMutation.mutate(payload as unknown as Team, {
         onSuccess: () => {
           setForm(emptyForm)
-          alert("Equipo creado correctamente.");
+          alert("Equipo creado correctamente.")
+        },
+        onError: (err: any) => {
+          alert("Error al crear equipo: " + (err.message || "Error desconocido"))
         },
       })
     }
@@ -100,7 +120,7 @@ export function TeamsPage() {
 
   function handleEdit(team: any) {
     setEditingId(team.id)
-    // Extraemos los IDs de los miembros actuales si vienen detallados en la respuesta
+    
     const currentMemberIds = team.members_detail 
       ? team.members_detail.map((m: any) => m.id) 
       : (team.members || []);
@@ -109,7 +129,8 @@ export function TeamsPage() {
       teamName: team.teamName,
       logoUrl: team.logoUrl || '',
       status: team.status,
-      members: currentMemberIds,
+      captain: Number(team.captain), // Cargamos el capitán actual en el formulario
+      members: currentMemberIds.filter((id: number) => id !== Number(team.captain)), // No duplicar al capitán en los checkboxes
     })
   }
 
@@ -131,86 +152,111 @@ export function TeamsPage() {
     <div className="page-container animate-fade-in">
       <h1>Equipos</h1>
 
-      <div className="form-card">
-        <h2>{editingId ? 'Editar Equipo' : 'Nuevo Equipo'}</h2>
-        <div className="form-grid-custom">
-          <input
-            className="custom-input"
-            placeholder="Nombre del equipo"
-            value={form.teamName}
-            onChange={(e) => handleChange('teamName', e.target.value)}
-          />
-          
-          {/* Contenedor de subida de logo estilizado */}
-          <div className="logo-upload-wrapper">
-            <label className="file-upload-btn">
-              <input 
-                type="file" 
-                accept="image/*" 
-                onChange={handleFileChange} 
-                className="file-input-hidden" 
-              />
-              <span className="file-upload-icon-text">📁 Seleccionar Logo</span>
-            </label>
-            
-            {form.logoUrl && (
-              <div className="preview-container">
-                <img src={form.logoUrl} alt="Preview" className="logo-preview-img" />
-                <button type="button" className="remove-logo" onClick={() => handleChange('logoUrl', '')}>×</button>
-              </div>
-            )}
-          </div>
-
-          <label className="checkbox-label">
+      {/* Condición: Solo mostramos el formulario si el usuario tiene permisos para crear/editar */}
+      {canUserCreateOrEdit ? (
+        <div className="form-card">
+          <h2>{editingId ? 'Editar Equipo' : 'Nuevo Equipo'}</h2>
+          <div className="form-grid-custom">
             <input
-              type="checkbox"
-              checked={form.status}
-              onChange={(e) => handleChange('status', e.target.checked)}
+              className="custom-input"
+              placeholder="Nombre del equipo"
+              value={form.teamName}
+              onChange={(e) => handleChange('teamName', e.target.value)}
             />
-            Activo
-          </label>
-        </div>
-
-        {/* --- SECCIÓN: SELECCIONAR INTEGRANTES --- */}
-        <div className="members-selection-section">
-          <h3>Seleccionar Integrantes del Equipo (Mínimo 2)</h3>
-          <div className="members-checkbox-grid">
-            {users?.map((player: any) => {
-              // 1. Evitamos que el capitán actual se agregue a sí mismo como integrante
-              if (player.id === loggedInUserId) return null;
-
-              // 2. Filtro temporal en Frontend: Excluir cuentas de administrador conocidas por su ID o gamertag
-              // (Por ejemplo, tu usuario Admin 'DjinsValdivia' con ID 1)
-              const adminIds = [1]; // Agrega aquí otros IDs de administradores si los hay
-              if (adminIds.includes(player.id)) return null;
-
-              // 3. CORRECCIÓN DE NOMBRE: Leemos la propiedad 'gamertag' que vimos en consola
-              const usernameDisplay = player.gamertag || `Jugador #${player.id}`;
-
-              return (
-                <label key={player.id} className="member-checkbox-card">
-                  <input
-                    type="checkbox"
-                    checked={form.members.includes(player.id)}
-                    onChange={() => handleMemberToggle(player.id)}
-                  />
-                  <span>👤 {usernameDisplay}</span>
-                </label>
-              );
-            })}
             
-            {/* Validar si quedan jugadores válidos para mostrar */}
-            {(!users || users.filter((u: any) => u.id !== loggedInUserId && u.id !== 1).length === 0) && (
-              <p className="no-members-text">No hay otros jugadores disponibles en la plataforma.</p>
-            )}
+            {/* Contenedor de subida de logo */}
+            <div className="logo-upload-wrapper">
+              <label className="file-upload-btn">
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleFileChange} 
+                  className="file-input-hidden" 
+                />
+                <span className="file-upload-icon-text">📁 Seleccionar Logo</span>
+              </label>
+              
+              {form.logoUrl && (
+                <div className="preview-container">
+                  <img src={form.logoUrl} alt="Preview" className="logo-preview-img" />
+                  <button type="button" className="remove-logo" onClick={() => handleChange('logoUrl', '')}>×</button>
+                </div>
+              )}
+            </div>
+
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={form.status}
+                onChange={(e) => handleChange('status', e.target.checked)}
+              />
+              Activo
+            </label>
+          </div>
+
+          {/* --- SECCIÓN: DESIGNAR AL CAPITÁN --- */}
+          <div className="captain-selection-section" style={{ marginTop: '15px' }}>
+            <h3>Designar Capitán del Equipo</h3>
+            <select
+              className="custom-input"
+              value={form.captain || loggedInUserId}
+              onChange={(e) => handleChange('captain', Number(e.target.value))}
+            >
+              {/* Opción por defecto (Tú) */}
+              <option value={loggedInUserId}>Tú ({profile?.gamertag || 'Mi Perfil'})</option>
+              {/* Opciones con el resto de jugadores */}
+              {users?.filter((u: any) => u.id !== loggedInUserId && u.id !== 1).map((player: any) => (
+                <option key={player.id} value={player.id}>
+                  {player.gamertag || `Jugador #${player.id}`}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* --- SECCIÓN: SELECCIONAR INTEGRANTES --- */}
+          <div className="members-selection-section" style={{ marginTop: '15px' }}>
+            <h3>Seleccionar Integrantes Adicionales</h3>
+            <div className="members-checkbox-grid">
+              {users?.map((player: any) => {
+                const currentCaptainId = form.captain || loggedInUserId;
+                
+                // 1. Evitamos que el capitán seleccionado arriba pueda ser marcado como integrante común
+                if (player.id === currentCaptainId) return null;
+
+                // 2. Excluir cuentas admin (ID 1)
+                const adminIds = [1];
+                if (adminIds.includes(player.id)) return null;
+
+                const usernameDisplay = player.gamertag || `Jugador #${player.id}`;
+
+                return (
+                  <label key={player.id} className="member-checkbox-card">
+                    <input
+                      type="checkbox"
+                      checked={form.members.includes(player.id)}
+                      onChange={() => handleMemberToggle(player.id)}
+                    />
+                    <span>👤 {usernameDisplay}</span>
+                  </label>
+                );
+              })}
+              
+              {(!users || users.filter((u: any) => u.id !== (form.captain || loggedInUserId) && u.id !== 1).length === 0) && (
+                <p className="no-members-text">No hay otros jugadores disponibles en la plataforma.</p>
+              )}
+            </div>
+          </div>
+
+          <div className="form-actions-custom" style={{ marginTop: '20px' }}>
+            <button className="primary-btn" onClick={handleSubmit}>{editingId ? 'Actualizar' : 'Crear'}</button>
+            {editingId && <button onClick={handleCancel} className="secondary-btn">Cancelar</button>}
           </div>
         </div>
-
-        <div className="form-actions-custom">
-          <button className="primary-btn" onClick={handleSubmit}>{editingId ? 'Actualizar' : 'Crear'}</button>
-          {editingId && <button onClick={handleCancel} className="secondary-btn">Cancelar</button>}
+      ) : (
+        <div className="form-card text-center text-muted">
+          <p>⚠️ Solo los administradores o el capitán de un equipo pueden realizar modificaciones.</p>
         </div>
-      </div>
+      )}
 
       <table className="data-table">
         <thead>
@@ -218,14 +264,25 @@ export function TeamsPage() {
             <th>ID</th>
             <th>Equipo</th>
             <th>Capitán</th>
-            <th>Integrantes</th>
+            <th>Integrantes (Plantilla Completa)</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {data?.map((t: any) => {
-            const canModify = (loggedInUserId === Number(t.captain)) || isAdmin;
+            const isCaptainOfThisTeam = loggedInUserId === Number(t.captain);
+            const canModify = isCaptainOfThisTeam || isAdmin;
+
+            // COMBINAR CAPITÁN E INTEGRANTES PARA LA LISTA COMPLETA
+            const captainObject = t.captain_detail || { id: Number(t.captain), username: `User #${t.captain}` };
+            const otherMembers = t.members_detail || [];
+            
+            // Filtramos duplicados por si acaso el capitán ya está en members_detail
+            const fullSquad = [
+              { ...captainObject, isCaptain: true },
+              ...otherMembers.filter((m: any) => m.id !== captainObject.id)
+            ];
 
             return (
               <tr key={t.id}>
@@ -234,33 +291,41 @@ export function TeamsPage() {
                 <td>
                   <div className="team-identity-cell">
                     {t.logoUrl ? (
-                      <img src={t.logoUrl} alt="Logo" className="team-table-logo" />
-                    ) : (
-                      <div className="team-table-placeholder">
-                        {t.teamName.charAt(0).toUpperCase()}
-                      </div>
-                    )}
+                      <img 
+                        src={t.logoUrl} 
+                        alt="Logo" 
+                        className="team-table-logo"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                          const placeholder = (e.target as HTMLImageElement).nextElementSibling as HTMLElement;
+                          if (placeholder) placeholder.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className="team-table-placeholder" 
+                      style={t.logoUrl ? { display: 'none' } : {}}
+                    >
+                      {t.teamName.charAt(0).toUpperCase()}
+                    </div>
                     <span className="team-table-name">{t.teamName}</span>
                   </div>
                 </td>
                 
                 <td>
                   <span className="captain-badge">
-                    👑 {t.captain_detail ? t.captain_detail.username : `User #${t.captain}`}
+                     👑 {t.captain_detail ? (t.captain_detail.gamertag || t.captain_detail.username) : `User #${t.captain}`}
                   </span>
                 </td>
                 
                 <td>
-                  {t.members_detail && t.members_detail.length > 0 ? (
-                    <ul className="members-inline-list">
-                      {t.members_detail.map((member: any) => (
-                        // Cambiado a member.gamertag
-                        <li key={member.id}>👤 {member.gamertag || `Jugador #${member.id}`}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <span className="no-members">Sin integrantes</span>
-                  )}
+                  <ul className="members-inline-list">
+                    {fullSquad.map((member: any) => (
+                      <li key={member.id} style={member.isCaptain ? { fontWeight: 'bold' } : {}}>
+                        👤 {member.gamertag || member.username || `Jugador #${member.id}`} {member.isCaptain && <small>(Capitán)</small>}
+                      </li>
+                    ))}
+                  </ul>
                 </td>
                 
                 <td>
