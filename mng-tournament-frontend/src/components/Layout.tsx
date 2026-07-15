@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './Auth.css';
 
 interface TournamentRegistration {
@@ -36,23 +36,22 @@ export const Layout: React.FC<LayoutProps> = ({ children, isLoggedIn, user, onLo
 
   return (
     <div className="app-container">
-      {/* Barra de Navegación Superior */}
+      {/* Barra de Navegación Lateral Izquierda */}
       <header className="main-header">
         <div className="logo-section">
           <span className="logo-unsa">UNSA</span>
           <span className="logo-sub">Torneos</span>
         </div>
         <nav className="top-nav">
-          <Link to="/" className="nav-link">Inicio</Link>
-          <Link to="/tournaments" className="nav-link">Torneos</Link>
-          
-          {/* Al quitar el div contenedor, los enlaces se alinean y separan perfectamente */}
+          <NavLink to="/" className="nav-link" end>Inicio</NavLink>
+          <NavLink to="/tournaments" className="nav-link">Torneos</NavLink>
+
           {isLoggedIn && isAdmin && (
             <>
-              <Link to="/organizers" className="nav-link">Organizadores</Link>
-              <Link to="/players" className="nav-link">Jugadores</Link>
-              <Link to="/teams" className="nav-link">Equipos</Link>
-              <Link to="/registrations" className="nav-link">Inscripciones</Link>
+              <NavLink to="/organizers" className="nav-link">Organizadores</NavLink>
+              <NavLink to="/players" className="nav-link">Jugadores</NavLink>
+              <NavLink to="/teams" className="nav-link">Equipos</NavLink>
+              <NavLink to="/registrations" className="nav-link">Inscripciones</NavLink>
             </>
           )}
         </nav>

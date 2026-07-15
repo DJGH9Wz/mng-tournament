@@ -1,197 +1,285 @@
-/* --- Auth.css css solo para el register y el login  --- */
+/* =========================================================
+   Auth.css — Tema claro "Cancha"
+   Fondo cálido · Acentos tierra · Sombras suaves
+   ========================================================= */
+
 :root {
-  --bg-primary: #0d0d0e;       /* Negro carbón para el fondo general */
-  --bg-secondary: #151518;     /* Gris muy oscuro para Cabecera y Sidebar */
-  --bg-card: #1e1e22;          /* Tarjetas y cajas de estadísticas */
-  --color-red: #e61c24;        /* Rojo intenso principal */
-  --color-red-hover: #b81016;  /* Rojo más oscuro para hover */
-  --color-gold: #f1c40f;       /* Dorado/Amarillo brillante para acentos */
-  --color-gold-hover: #d4ac0d; /* Dorado para hover */
-  --text-main: #f5f5f7;        /* Blanco suave de alta legibilidad */
-  --text-muted: #a0a0ab;       /* Gris claro para textos secundarios */
-  --border-color: #26262b;     /* Bordes sutiles oscuros */
+  /* Fondos */
+  --bg-primary: #f5f1eb;
+  --bg-secondary: #ebe5db;
+  --bg-card: #faf8f4;
+  --bg-elevated: #ede9e1;
+
+  /* Acentos */
+  --accent: #4a6741;
+  --accent-hover: #3d5636;
+  --accent-deep: #2e4528;
+  --accent-warm: #c2882e;
+  --accent-warm-hover: #d49a3a;
+  --accent-rose: #b85a5a;
+
+  /* Textos */
+  --text-main: #2c2c2c;
+  --text-muted: #6b6560;
+  --text-dim: #9c958e;
+
+  /* Bordes */
+  --border-color: #ddd5c8;
+  --border-glow: rgba(74, 103, 65, 0.3);
+
+  /* Estados */
+  --color-danger: #c2544d;
+  --color-success: #4a6741;
+  --color-warning: #c2882e;
+
+  /* Derivados */
+  --accent-15: rgba(74, 103, 65, 0.12);
+  --accent-20: rgba(74, 103, 65, 0.18);
+  --accent-30: rgba(74, 103, 65, 0.28);
+  --warm-15: rgba(194, 136, 46, 0.12);
+  --shadow-soft: 0 2px 8px rgba(80, 60, 30, 0.08);
+  --shadow-glow: 0 0 0 3px rgba(74, 103, 65, 0.15);
+}
+
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
 }
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-main);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   margin: 0;
-}
-
-/* Contenedor Principal */
-.app-container {
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
 }
 
-/* Cabecera Superior */
-.main-header {
+/* ---------- Layout principal ---------- */
+.app-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
-  height: 60px;
-  box-sizing: border-box;
+  flex-direction: row;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.main-header {
+  width: 240px;
+  min-width: 240px;
+  height: 100vh;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 0;
+  box-shadow: 2px 0 12px rgba(80, 60, 30, 0.06);
+  overflow-y: auto;
 }
 
 .logo-section {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .logo-unsa {
-  background: var(--color-red);
-  color: #ffffff; /* Letras blancas en el logo para excelente contraste */
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  font-weight: bold;
-}
-
-.logo-sub {
-  color: var(--color-gold); /* Subtítulo del logo en Dorado */
-  font-weight: 500;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 1.1rem;
   letter-spacing: 1px;
 }
 
+.logo-sub {
+  color: var(--accent-warm);
+  font-weight: 500;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+/* Links de navegación */
 .top-nav {
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
 }
 
 .nav-link {
   color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s;
+  font-size: 0.95rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .nav-link:hover {
-  color: var(--color-gold); /* Hover dorado en el menú */
+  color: var(--text-main);
+  background-color: var(--accent-15);
+  border-left-color: var(--accent);
+  transform: translateX(2px);
 }
 
-/* Distribución en Rejilla */
+.nav-link.active {
+  color: var(--text-main);
+  background-color: var(--accent-15);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---------- Distribución principal ---------- */
 .main-layout {
-  display: grid;
-  grid-template-columns: 1fr 320px;
+  display: flex;
   flex: 1;
-  height: calc(100vh - 60px);
+  min-width: 0;
+  height: 100vh;
   overflow: hidden;
 }
 
 .content-area {
-  padding: 2rem;
+  flex: 1;
+  padding: 2rem 2.5rem;
   overflow-y: auto;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(74, 103, 65, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 80% 100%, rgba(194, 136, 46, 0.03) 0%, transparent 40%),
+    var(--bg-primary);
 }
 
-/* Barra Lateral Derecha */
 .right-sidebar {
-  background-color: var(--bg-secondary);
+  width: 320px;
+  min-width: 320px;
+  background: var(--bg-card);
   border-left: 1px solid var(--border-color);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
 }
 
-/* Tarjetas */
-.profile-card, .guest-card {
+.profile-card,
+.guest-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  box-shadow: var(--shadow-soft);
 }
 
 .guest-card {
-  justify-content: center;
+  margin-top: 1rem;
   text-align: center;
-  padding: 1rem;
+  gap: 0.8rem;
 }
 
 .guest-icon {
   font-size: 3rem;
-  margin-bottom: 1rem;
-  color: var(--color-gold);
+  margin-bottom: 0.5rem;
+  color: var(--accent-warm);
 }
 
 .guest-card h3 {
-  margin-bottom: 0.5rem;
+  margin: 0;
   color: var(--text-main);
+  font-size: 1.1rem;
 }
 
 .guest-card p {
   color: var(--text-muted);
-  font-size: 0.9rem;
-  line-height: 1.4;
-  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .auth-buttons {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
 }
 
-/* Botones del Sidebar */
-.login-btn-sidebar, .register-btn-sidebar, .logout-btn {
+/* ---------- Botones del sidebar ---------- */
+.login-btn-sidebar,
+.register-btn-sidebar,
+.logout-btn {
   width: 100%;
-  padding: 0.8rem;
-  border-radius: 6px;
+  padding: 0.75rem;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .login-btn-sidebar {
-  background-color: var(--color-red);
-  color: #ffffff; /* Texto blanco sobre botón rojo */
+  background: var(--accent);
+  color: #ffffff;
   border: none;
 }
 
 .login-btn-sidebar:hover {
-  background-color: var(--color-red-hover);
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 103, 65, 0.25);
 }
 
 .register-btn-sidebar {
   background-color: transparent;
-  color: var(--color-gold);
-  border: 1px solid var(--color-gold);
+  color: var(--accent);
+  border: 1px solid var(--accent);
 }
 
 .register-btn-sidebar:hover {
-  background-color: var(--color-gold);
-  color: #000000; /* Texto negro al rellenarse de dorado */
+  background-color: var(--accent);
+  color: #ffffff;
 }
 
 .logout-btn {
-  background-color: #2a2a30;
-  color: #ff4a4a; /* Rojo brillante para destacar "Cerrar sesión" */
-  border: 1px solid #ff4a4a;
+  background-color: #ffffff;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
   margin-top: auto;
 }
 
 .logout-btn:hover {
-  background-color: #ff4a4a;
-  color: #000000;
+  background-color: var(--color-danger);
+  color: #ffffff;
 }
 
-/* Avatar circular del Usuario */
+/* ---------- Avatar ---------- */
 .user-avatar-container {
   position: relative;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .user-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-color: var(--color-red);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
   color: #ffffff;
   font-size: 2.2rem;
   font-weight: bold;
@@ -205,26 +293,30 @@ body {
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: #000000;
-  color: var(--color-gold); /* Badge "Admin" en dorado */
-  border: 1px solid var(--color-gold);
-  font-size: 0.75rem;
+  background-color: var(--bg-card);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-size: 0.7rem;
   font-weight: bold;
-  padding: 0.1rem 0.4rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .user-gamertag {
   margin: 0;
-  font-size: 1.2rem;
-  color: #ffffff; /* Blanco puro para que se lea perfectamente */
-  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--text-main);
+  font-weight: 700;
 }
 
 .user-email {
-  color: var(--text-muted); /* Gris claro muy legible */
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   margin-top: 0.2rem;
+  word-break: break-all;
+  text-align: center;
 }
 
 .divider {
@@ -232,65 +324,86 @@ body {
   border: 0;
   height: 1px;
   background: var(--border-color);
-  margin: 1.5rem 0;
+  margin: 1.25rem 0;
 }
 
-/* Estilos de secciones dentro del Sidebar */
+/* ---------- Secciones del sidebar ---------- */
 .sidebar-section {
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   text-align: left;
 }
 
 .sidebar-section h4 {
-  margin-bottom: 0.8rem;
-  font-size: 0.9rem;
-  color: var(--color-gold); /* Títulos de sección en Dorado */
+  margin: 0 0 0.7rem 0;
+  font-size: 0.8rem;
+  color: var(--accent-warm);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  font-weight: 700;
 }
 
 .sidebar-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
 .sidebar-list-item {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  background: var(--bg-card);
-  padding: 0.6rem;
+  background-color: var(--bg-elevated);
+  padding: 0.55rem 0.7rem;
   border-radius: 6px;
-  margin-bottom: 0.5rem;
+  border: 1px solid var(--border-color);
+  transition: border-color 0.2s ease;
+}
+
+.sidebar-list-item:hover {
+  border-color: var(--accent);
 }
 
 .tournament-dot {
   width: 8px;
   height: 8px;
-  background-color: var(--color-red); /* Puntos en rojo intenso */
+  background-color: var(--accent);
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.tournament-info .t-name {
-  font-size: 0.85rem;
+.tournament-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.t-name {
+  font-size: 0.82rem;
   margin: 0;
   font-weight: 500;
   color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.tournament-info .t-status {
-  font-size: 0.75rem;
+.t-status {
+  font-size: 0.72rem;
   color: var(--text-muted);
 }
 
 .empty-text {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
 }
 
-/* Estadísticas */
+/* ---------- Estadísticas ---------- */
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -298,64 +411,65 @@ body {
 }
 
 .stat-box {
-  background-color: var(--bg-card);
-  padding: 0.8rem;
+  background-color: var(--bg-elevated);
+  padding: 0.7rem;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid var(--border-color);
 }
 
 .stat-num {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--color-gold); /* Números en Dorado brillante */
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--accent-warm);
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.15rem;
 }
 
-/* --- PALETA DE COLORES (Rojo, Dorado y Negro Carbón) --- */
-:root {
-  --bg-primary: #0d0d0e;       /* Negro carbón */
-  --bg-secondary: #151518;     /* Fondo de la Tarjeta */
-  --color-red: #e61c24;        /* Rojo intenso */
-  --color-red-hover: #b81016;  /* Rojo hover */
-  --color-gold: #f1c40f;       /* Dorado brillante */
-  --color-gold-hover: #d4ac0d; /* Dorado hover */
-  --text-main: #f5f5f7;        /* Blanco legible */
-  --text-muted: #a0a0ab;       /* Gris claro */
-  --border-color: #26262b;
-}
-
-/* Contenedor que centra el formulario en la pantalla */
+/* ---------- Auth ---------- */
 .auth-container {
-  max-width: 400px;
-  margin: 60px auto;
+  max-width: 420px;
+  margin: 80px auto;
   padding: 2.5rem;
-  background-color: var(--bg-secondary);
-  border-radius: 8px;
+  background: var(--bg-card);
+  border-radius: 14px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+  box-shadow: var(--shadow-strong);
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Títulos */
+.auth-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+}
+
 .auth-title {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.5rem 0;
   font-size: 1.8rem;
-  color: #ffffff; /* Blanco puro */
-  font-weight: bold;
+  color: var(--text-main);
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
 
-/* Formulario y Espaciado de Campos */
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.1rem;
 }
 
 .auth-field {
@@ -365,52 +479,61 @@ body {
 }
 
 .auth-label {
-  font-size: 0.9rem;
-  color: var(--text-muted); /* Gris claro */
+  font-size: 0.85rem;
+  color: var(--text-muted);
   margin-bottom: 0.4rem;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Estilos de los Inputs */
 .auth-input {
-  background-color: var(--bg-primary);
-  color: #ffffff; /* Texto de escritura en blanco puro */
+  background-color: #ffffff;
+  color: var(--text-main);
   border: 1px solid var(--border-color);
-  padding: 0.8rem;
-  border-radius: 6px;
-  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  font-family: inherit;
 }
 
-/* El borde se vuelve dorado brillante al enfocar */
+.auth-input::placeholder {
+  color: var(--text-dim);
+}
+
 .auth-input:focus {
-  border-color: var(--color-gold);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-glow);
 }
 
-/* Botones de Envío */
 .auth-submit-btn {
-  background-color: var(--color-red);
-  color: #ffffff; /* Texto blanco en botón rojo */
+  background: var(--accent);
+  color: #ffffff;
   font-size: 1rem;
-  font-weight: bold;
-  padding: 0.8rem;
+  font-weight: 700;
+  padding: 0.9rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 0.5rem;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-top: 0.6rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .auth-submit-btn:hover {
-  background-color: var(--color-red-hover);
+  background: var(--accent-hover);
+  box-shadow: 0 4px 14px rgba(74, 103, 65, 0.3);
+  transform: translateY(-1px);
 }
 
 .auth-submit-btn:active {
   transform: scale(0.98);
 }
 
-/* Enlaces del pie de página */
 .auth-footer-text {
   margin-top: 1.5rem;
   font-size: 0.9rem;
@@ -418,34 +541,120 @@ body {
 }
 
 .auth-link {
-  color: var(--color-gold); /* Enlace en dorado */
+  color: var(--accent-warm);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   transition: color 0.2s ease;
 }
 
 .auth-link:hover {
-  color: var(--color-gold-hover);
+  color: var(--accent-warm-hover);
   text-decoration: underline;
 }
 
-/* Mensajes de Alerta y Estado */
+/* Mensajes */
 .auth-error {
-  background-color: rgba(230, 28, 36, 0.1); /* Fondo rojo transparente */
-  color: #ff4a4a; /* Rojo brillante */
-  border: 1px solid rgba(230, 28, 36, 0.25);
+  background-color: rgba(194, 84, 77, 0.08);
+  color: var(--color-danger);
+  border: 1px solid rgba(194, 84, 77, 0.25);
   padding: 0.8rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.85rem;
   margin-bottom: 1rem;
 }
 
 .auth-success {
-  background-color: rgba(46, 204, 113, 0.1);
-  color: #2ecc71;
-  border: 1px solid rgba(46, 204, 113, 0.2);
+  background-color: rgba(74, 103, 65, 0.08);
+  color: var(--color-success);
+  border: 1px solid rgba(74, 103, 65, 0.25);
   padding: 0.8rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.85rem;
   margin-bottom: 1rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .main-header {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-left: none;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+  }
+
+  .logo-section {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-right: auto;
+  }
+
+  .top-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--accent);
+    transform: none;
+  }
+
+  .main-layout {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .content-area {
+    padding: 1.25rem;
+  }
+
+  .right-sidebar {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    position: relative;
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+  }
 }
