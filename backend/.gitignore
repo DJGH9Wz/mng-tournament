@@ -1,0 +1,25 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+build/
+dist/
+*.whl
+
+# === Entorno Virtual ===
+venv/
+.venv/
+env/
+ENV/
+
+# === Base de datos local ===
+*.sqlite3
+
+# === Django ===
+*.log
+local_settings.py
+
+# === Archivos sensibles ===
+.env
